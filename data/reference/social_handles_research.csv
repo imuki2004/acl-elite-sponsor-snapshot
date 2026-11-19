@@ -1,0 +1,11 @@
+club_key,platform,handle,confidence,evidence,evidence_url,researched_on
+Al-Ahli_Saudi_FC,youtube,@ALAHLI_FC,confirmed,YouTube search: verified badge; same handle as club X account linked on alahlifc.sa,https://www.youtube.com/results?search_query=Al+Ahli+Saudi+Club&sp=EgIQAg%3D%3D,2026-11-19
+Al-Ittihad_Club_(Jeddah),youtube,@ittihadclub,confirmed,YouTube search: verified badge; channel name 'قناة نادي الاتحاد السعودي' (Saudi Ittihad Club channel),https://www.youtube.com/results?search_query=Ittihad+Club&sp=EgIQAg%3D%3D,2026-11-19
+Johor_Darul_Ta'zim_F.C.,youtube,@JDTTVofficial,confirmed,YouTube search: verified badge; channel name 'JDTTV',https://www.youtube.com/results?search_query=JDT+Johor+Darul+Tazim&sp=EgIQAg%3D%3D,2026-11-19
+Sanfrecce_Hiroshima,youtube,@sanfreccechannel,confirmed,Channel name is the club name 'サンフレッチェ広島 l SANFRECCE HIROSHIMA'; Soccer King club profile lists youtube.com/user/sanfreccechannel as the official channel,https://www.soccer-king.jp/team/article/420218.html,2026-11-19
+Al_Sadd_SC,youtube,@alsaddtv,check,Top YouTube search result 'AlSaddSC نادي السد - قطر' but no verified badge,https://www.youtube.com/results?search_query=Al+Sadd+SC&sp=EgIQAg%3D%3D,2026-11-19
+Al_Wahda_FC,youtube,@ALWAHDATV,check,Top YouTube search result 'ALWAHDA TV' but no verified badge; other clubs are also called Al Wahda (Syria; Saudi Arabia) - confirm it is the Abu Dhabi club,https://www.youtube.com/results?search_query=Al+Wahda+FC&sp=EgIQAg%3D%3D,2026-11-19
+Sharjah_FC,youtube,@OfficialSharjahFC,check,Top YouTube search result 'نادي الشارقة لكرة القدم | Sharjah Fc' but no verified badge,https://www.youtube.com/results?search_query=Sharjah+FC&sp=EgIQAg%3D%3D,2026-11-19
+FC_Nasaf,youtube,@FCNASAFTV,check,Top YouTube search result 'FC NASAF' but no verified badge; a second channel @FC_NASAF-UZ has the same name,https://www.youtube.com/results?search_query=FC+Nasaf&sp=EgIQAg%3D%3D,2026-11-19
+Shanghai_Shenhua_F.C.,youtube,@ShenhuaFC_Official,check,Top YouTube search result 'Shanghai Shenhua FC' but no verified badge,https://www.youtube.com/results?search_query=Shanghai+Shenhua&sp=EgIQAg%3D%3D,2026-11-19
+FC_Nasaf,x,fcnasaf,check,Novastan article links the club's X account as x.com/fcnasaf (third-party source),https://novastan.org/en/wp-json/wp/v2/posts/48828,2026-11-19
