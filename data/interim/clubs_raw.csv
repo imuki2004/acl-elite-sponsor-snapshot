@@ -1,0 +1,25 @@
+club_key,club_name_raw,country_raw,region,home_stadium,league_home_matches_at_main_stadium,other_home_venues,capacity_raw,capacity_source,capacity_source_file
+Al_Hilal_SFC,Al Hilal,Saudi Arabia,West,Kingdom Arena,4,,30.000,transfermarkt,tm_acle_attendance_2025.html
+Al-Ahli_Saudi_FC,Al-Ahli,Saudi Arabia,West,King Abdullah Sports City Stadium,3,"Prince Abdullah Al-Faisal Sports City Stadium, Jeddah",62.345,transfermarkt,tm_acle_attendance_2025.html
+Tractor_S.C.,Tractor,Iran,West,Sahand Stadium,3,"Jassim bin Hamad Stadium, Doha (Qatar)[note 1]",66.833,transfermarkt,tm_acle_attendance_2025.html
+Al-Ittihad_Club_(Jeddah),Al-Ittihad,Saudi Arabia,West,King Abdullah Sports City Stadium,4,,62.345,transfermarkt,tm_acle_attendance_2025.html
+Al_Wahda_FC,Al Wahda,United Arab Emirates,West,Al Nahyan Stadium,4,,15.000,transfermarkt,tm_acle_attendance_2025.html
+Shabab_Al_Ahli_Club,Shabab Al Ahli,United Arab Emirates,West,Rashid Stadium,4,,"8,015",wikipedia_stadium_page,wiki_stadium_rashid.html
+Al-Duhail_SC,Al-Duhail,Qatar,West,Abdullah Bin Khalifa Stadium,4,,"10,221",wikipedia_stadium_page,wiki_stadium_abdullah_bin_khalifa.html
+Al_Sadd_SC,Al Sadd,Qatar,West,Jassim bin Hamad Stadium,4,,"15,000",wikipedia_stadium_page,wiki_stadium_jassim_bin_hamad.html
+Sharjah_FC,Sharjah,United Arab Emirates,West,Sharjah Stadium,4,,18.000,transfermarkt,tm_acle_attendance_2025.html
+Al-Gharafa_SC,Al-Gharafa,Qatar,West,Thani bin Jassim Stadium,3,"Khalifa International Stadium, Al Rayyan",24.826,transfermarkt,tm_acle_attendance_2025.html
+Al-Shorta_SC,Al-Shorta,Iraq,West,Al Zawraa Stadium,3,"Al-Madina International Stadium, Baghdad",15.443,transfermarkt,tm_acle_attendance_2025.html
+FC_Nasaf,Nasaf,Uzbekistan,West,Markaziy Stadium,3,"Istiqlol Stadium, Fergana",17.750,transfermarkt,tm_acle_attendance_2025.html
+FC_Machida_Zelvia,Machida Zelvia,Japan,East,Machida City Nozuta Park Stadium,4,,15.320,transfermarkt,tm_acle_attendance_2025.html
+Vissel_Kobe,Vissel Kobe,Japan,East,Kobe City Misaki Park Stadium,4,,30.132,transfermarkt,tm_acle_attendance_2025.html
+Sanfrecce_Hiroshima,Sanfrecce Hiroshima,Japan,East,Hiroshima Soccer Stadium,4,,28.529,transfermarkt,tm_acle_attendance_2025.html
+Buriram_United_F.C.,Buriram United,Thailand,East,Buriram Stadium,4,,32.600,transfermarkt,tm_acle_attendance_2025.html
+Melbourne_City_FC,Melbourne City,Australia,East,Melbourne Rectangular Stadium,4,,30.050,transfermarkt,tm_acle_attendance_2025.html
+Johor_Darul_Ta'zim_F.C.,Johor Darul Ta'zim,Malaysia,East,Sultan Ibrahim Stadium,4,,40.000,transfermarkt,tm_acle_attendance_2025.html
+FC_Seoul,FC Seoul,South Korea,East,Seoul World Cup Stadium,3,"Mokdong Stadium, Seoul[note 2]",66.704,transfermarkt,tm_acle_attendance_2025.html
+Gangwon_FC,Gangwon FC,South Korea,East,Chuncheon Songam Sports Town Stadium,4,,20.000,transfermarkt,tm_acle_attendance_2025.html
+Ulsan_HD_FC,Ulsan HD,South Korea,East,Ulsan Munsu Football Stadium,4,,44.474,transfermarkt,tm_acle_attendance_2025.html
+Chengdu_Rongcheng_F.C.,Chengdu Rongcheng,China,East,Phoenix Hill Sports Park Football Stadium,4,,50.695,transfermarkt,tm_acle_attendance_2025.html
+Shanghai_Shenhua_F.C.,Shanghai Shenhua,China,East,Shanghai Stadium,4,,70.381,transfermarkt,tm_acle_attendance_2025.html
+Shanghai_Port_F.C.,Shanghai Port,China,East,Pudong Football Stadium,4,,33.765,transfermarkt,tm_acle_attendance_2025.html
