@@ -82,6 +82,34 @@ overwrites it.
 5. Leave `followers` **empty** if the club has no official account on that
    platform, and write why in `collector_notes`. Never estimate.
 
-Mainland-China clubs (Chengdu Rongcheng, Shanghai Port, Shanghai Shenhua) mainly
-use Weibo/Douyin, which are not in scope. Their totals will understate their
-real digital reach, and the notes sheet will say so.
+### Finding the accounts that were missing
+
+`python scripts/lookup_youtube_channels.py` writes **`youtube_channel_lookup.csv`**.
+YouTube pages load without a login, so this script:
+- resolves every known YouTube link to its channel id. This showed that the
+  website and Wikidata links for Al Hilal, Buriram, Machida and Ulsan are the
+  **same channel**.
+- searches YouTube for clubs without a channel and records whether each result
+  has the **verified badge**.
+
+Accounts chosen through this lookup or through web search are recorded by
+hand, with evidence, in
+[`data/reference/social_handles_research.csv`](../reference/social_handles_research.csv):
+- `confirmed` means strong evidence, such as the YouTube verified badge.
+- `check` means likely, but please confirm before entering numbers.
+
+TikTok, Instagram and X block automated checks, so their gaps remain
+`not_found`.
+
+### Mainland-China clubs: Weibo and Douyin
+Chengdu Rongcheng, Shanghai Port and Shanghai Shenhua mostly use Chinese
+platforms, because Instagram, TikTok, YouTube and X are blocked in China. The
+template therefore has extra **`weibo`** rows (account ids from Wikidata,
+property P3579) and **`douyin`** rows (search by the Chinese club name) for these
+3 clubs only. They are marked `counts_in_core_total = no`:
+- `total_digital_followers` uses only the 4 core platforms, so all 24 clubs
+  are compared on the same platforms.
+- Weibo/Douyin followers are reported in separate columns.
+
+Weibo shows counts like `12.3万` (万 = 10,000). Enter them as shown; `clean.py`
+converts them.

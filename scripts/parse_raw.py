@@ -271,10 +271,14 @@ def build_clubs(league: pd.DataFrame, matches: pd.DataFrame,
 # --------------------------------------------------------------------------
 # Social-media accounts (handles only - follower counts are collected by hand)
 # --------------------------------------------------------------------------
-PLATFORMS = ["instagram", "tiktok", "youtube", "x"]
+# Core platforms are compared across all 24 clubs. Weibo is extra: the main
+# platform for mainland-China clubs, where the core platforms are blocked.
+CORE_PLATFORMS = ["instagram", "tiktok", "youtube", "x"]
+PLATFORMS = CORE_PLATFORMS + ["weibo"]
 
 # Wikidata property per platform
-WIKIDATA_PROPERTY = {"instagram": "P2003", "tiktok": "P7085", "youtube": "P2397", "x": "P2002"}
+WIKIDATA_PROPERTY = {"instagram": "P2003", "tiktok": "P7085", "youtube": "P2397",
+                     "x": "P2002", "weibo": "P3579"}
 
 # How each platform's profile links look in a web page
 LINK_PATTERN = {
@@ -282,6 +286,7 @@ LINK_PATTERN = {
     "tiktok": r"tiktok\.com/@([A-Za-z0-9_.]+)",
     "youtube": r"youtube\.com/((?:channel/|c/|user/|@)[A-Za-z0-9_\-.]+)",
     "x": r"(?:twitter|x)\.com/([A-Za-z0-9_]+)",
+    "weibo": r"weibo\.com/(?:u/)?([A-Za-z0-9_]+)",
 }
 # Path segments that are features of the platform, not accounts
 NOT_ACCOUNTS = {"p", "reel", "reels", "explore", "share", "sharer", "embed", "watch",
@@ -292,6 +297,8 @@ PROFILE_URL = {
     "tiktok": "https://www.tiktok.com/@{}",
     "youtube": "https://www.youtube.com/{}",
     "x": "https://x.com/{}",
+    "weibo": "https://weibo.com/{}",       # numeric ids and names both work here
+    "douyin": "https://www.douyin.com/{}",  # no ids known; filled by hand
 }
 
 
