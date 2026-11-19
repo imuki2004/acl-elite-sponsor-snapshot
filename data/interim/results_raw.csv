@@ -1,0 +1,25 @@
+region,club_key,club_name_raw,country_raw,position_raw,played_raw,won_raw,drawn_raw,lost_raw,goals_for_raw,goals_against_raw,goal_diff_raw,points_raw,qualification_raw,source_file
+West,Al_Hilal_SFC,Al Hilal,Saudi Arabia,1,8,7,1,0,17,6,+11,22,Advance to round of 16,wiki_acle.html
+West,Al-Ahli_Saudi_FC,Al-Ahli,Saudi Arabia,2,8,5,2,1,21,9,+12,17,,wiki_acle.html
+West,Tractor_S.C.,Tractor,Iran,3,8,5,2,1,12,4,+8,17,,wiki_acle.html
+West,Al-Ittihad_Club_(Jeddah),Al-Ittihad,Saudi Arabia,4,8,5,0,3,22,9,+13,15,,wiki_acle.html
+West,Al_Wahda_FC,Al Wahda,United Arab Emirates,5,8,4,2,2,11,7,+4,14,,wiki_acle.html
+West,Shabab_Al_Ahli_Club,Shabab Al Ahli,United Arab Emirates,6,8,3,2,3,14,14,0,11,,wiki_acle.html
+West,Al-Duhail_SC,Al-Duhail,Qatar,7,8,2,2,4,16,16,0,8,,wiki_acle.html
+West,Al_Sadd_SC,Al Sadd,Qatar,8,8,2,2,4,12,16,−4,8,,wiki_acle.html
+West,Sharjah_FC,Sharjah,United Arab Emirates,9,8,2,2,4,8,16,−8,8,,wiki_acle.html
+West,Al-Gharafa_SC,Al-Gharafa,Qatar,10,8,2,0,6,7,21,−14,6,,wiki_acle.html
+West,Al-Shorta_SC,Al-Shorta,Iraq,11,8,1,2,5,6,20,−14,5,,wiki_acle.html
+West,FC_Nasaf,Nasaf,Uzbekistan,12,8,1,1,6,9,17,−8,4,,wiki_acle.html
+East,FC_Machida_Zelvia,Machida Zelvia,Japan,1,8,5,2,1,15,7,+8,17,Advance to round of 16,wiki_acle.html
+East,Vissel_Kobe,Vissel Kobe,Japan,2,8,5,1,2,14,7,+7,16,,wiki_acle.html
+East,Sanfrecce_Hiroshima,Sanfrecce Hiroshima,Japan,3,8,4,3,1,10,6,+4,15,,wiki_acle.html
+East,Buriram_United_F.C.,Buriram United,Thailand,4,8,4,2,2,10,8,+2,14,,wiki_acle.html
+East,Melbourne_City_FC,Melbourne City,Australia,5,8,4,2,2,9,7,+2,14,,wiki_acle.html
+East,Johor_Darul_Ta'zim_F.C.,Johor Darul Ta'zim,Malaysia,6,8,3,2,3,8,7,+1,11,,wiki_acle.html
+East,FC_Seoul,FC Seoul,South Korea,7,8,2,4,2,10,9,+1,10,,wiki_acle.html
+East,Gangwon_FC,Gangwon FC,South Korea,8,8,2,3,3,9,11,−2,9,,wiki_acle.html
+East,Ulsan_HD_FC,Ulsan HD,South Korea,9,8,2,3,3,6,8,−2,9,,wiki_acle.html
+East,Chengdu_Rongcheng_F.C.,Chengdu Rongcheng,China,10,8,1,3,4,7,11,−4,6,,wiki_acle.html
+East,Shanghai_Shenhua_F.C.,Shanghai Shenhua,China,11,8,1,1,6,5,13,−8,4,,wiki_acle.html
+East,Shanghai_Port_F.C.,Shanghai Port,China,12,8,0,4,4,2,11,−9,4,,wiki_acle.html
