@@ -82,6 +82,22 @@ overwrites it.
 5. Leave `followers` **empty** if the club has no official account on that
    platform, and write why in `collector_notes`. Never estimate.
 
+### Collected data: `digital_followers_filled.csv`
+The template filled in by hand on **2026-11-19** (102 rows). It is the file
+`clean.py` reads. `digital_followers_manual.csv` is the empty template it
+started from. Each row's `collector_notes` records precision (`exact` or
+`rounded_by_platform`) and whether the account has a verified badge.
+
+`clean.py` applies these rules (see `account_status` in
+`data/clean/digital_followers.csv`):
+- **No official account → 0.**
+- **Unverified accounts are excluded (0):** every `research_check` account, plus
+  Wikidata-only accounts marked "not verified" (Al Duhail and Ulsan TikTok).
+  Accounts linked from a club's own website count even without a badge.
+  This removes 11 accounts and 495,575 followers, mainly JDT TikTok (311K).
+  Switch it off with `EXCLUDE_UNVERIFIED = False`.
+- **Douyin → 0, status `not_checked`.** Douyin search needs a Chinese phone login.
+
 ### Finding the accounts that were missing
 
 `python scripts/lookup_youtube_channels.py` writes **`youtube_channel_lookup.csv`**.
