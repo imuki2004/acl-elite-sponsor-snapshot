@@ -3,3 +3,6 @@ fetched_at_utc,file,http_status,bytes,sha256,url
 2026-11-19T13:13:00Z,wiki_acle.html,200,881731,9466f1bd8946698c862c81ca29e000bb89eab290e3baceaea914fad53338ff93,"https://en.wikipedia.org/wiki/2025%E2%80%9326_AFC_Champions_League_Elite"
 2026-11-19T13:13:24Z,tm_acle_attendance_2025.html,200,99472,f45318ba75b65224a9a01f62bf452e1528335427b3311ec2be427728316075e8,"https://www.transfermarkt.com/afc-champions-league-elite/besucherzahlen/pokalwettbewerb/ACLE/saison_id/2025"
 2026-11-19T13:15:09Z,wiki_knockout_stage.html,200,507993,2510db997d95174aee8dc722b4858338e059c7fd5f7c9246c43d0090c6c24330,"https://en.wikipedia.org/wiki/2025%E2%80%9326_AFC_Champions_League_Elite_knockout_stage"
+2026-11-19T13:41:07Z,wiki_stadium_jassim_bin_hamad.html,200,203709,526a37891fb81bdee98e47f9c27894f4ee0ec76c402dd4de4175436e4501abc5,"https://en.wikipedia.org/w/index.php?title=Jassim_bin_Hamad_Stadium&oldid=1385277411"
+2026-11-19T13:41:10Z,wiki_stadium_abdullah_bin_khalifa.html,200,203627,68d983ca8d906ce90d6a5fc6ffd9e2d279fed66d86ea4d7089293cea95b79f66,"https://en.wikipedia.org/w/index.php?title=Abdullah_bin_Khalifa_Stadium&oldid=1385459817"
+2026-11-19T13:41:13Z,wiki_stadium_rashid.html,200,126543,3d38c02a168ce6f120e435f5e32bffa22ae50c5b1e1f918de3c8195940b9ac9d,"https://en.wikipedia.org/w/index.php?title=Rashid_Stadium&oldid=1384819846"
