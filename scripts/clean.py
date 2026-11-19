@@ -79,6 +79,20 @@ COUNTRY_NAMES = {
 # Home matches that were not played in the club's own country/city.
 NEUTRAL_VENUE_MARKERS = ["(Qatar)"]  # Tractor's 'home' match in Doha
 
+# DIGITAL FOLLOWER RULES (decided 2026-11-19):
+#  - No official account found -> 0 followers.
+#  - Unverified accounts are EXCLUDED (counted as 0): every 'research_check'
+#    account, and Wikidata-only accounts the collector marked 'not verified'.
+#    Accounts linked from the club's own website are kept even without a
+#    badge: the club itself says they are official.
+#  - Set EXCLUDE_UNVERIFIED = False to count them anyway.
+EXCLUDE_UNVERIFIED = True
+CORE_PLATFORMS = ["instagram", "tiktok", "youtube", "x"]
+CHINA_PLATFORMS = ["weibo", "douyin"]  # collected for mainland-China clubs only
+
+# Furthest stage reached, in order
+STAGES = ["League stage", "Round of 16", "Quarter-finals", "Semi-finals", "Runner-up", "Winner"]
+
 
 # --------------------------------------------------------------------------
 # 2. Text -> number
@@ -185,6 +199,116 @@ def club_attendance(matches: pd.DataFrame, clubs: pd.DataFrame) -> pd.DataFrame:
     return out
 
 
+def parse_score(score: str) -> tuple:
+    """'1–0 (a.e.t.)' -> (1, 0). Wikipedia uses an en dash between the goals."""
+    match = re.match(r"(\d+)\s*[–-]\s*(\d+)", score)
+    return (int(match.group(1)), int(match.group(2))) if match else (None, None)
+
+
+def add_goals(m: pd.DataFrame) -> None:
+    """Home/away goals and the winner's club_key for every match."""
+    goals = m["score"].map(parse_score)
+    m["home_goals"] = goals.str[0].astype("Int64")
+    m["away_goals"] = goals.str[1].astype("Int64")
+    pens = m["penalties"].map(parse_score)
+    home_pens, away_pens = pens.str[0], pens.str[1]
+    home_wins = (m["home_goals"] > m["away_goals"]) | (
+        (m["home_goals"] == m["away_goals"]) & (home_pens > away_pens))
+    away_wins = (m["home_goals"] < m["away_goals"]) | (
+        (m["home_goals"] == m["away_goals"]) & (home_pens < away_pens))
+    m["winner_club_key"] = ""
+    m.loc[home_wins.fillna(False), "winner_club_key"] = m["home_club_key"]
+    m.loc[away_wins.fillna(False), "winner_club_key"] = m["away_club_key"]
+
+
+def clean_results(raw: pd.DataFrame, matches: pd.DataFrame) -> pd.DataFrame:
+    """League table as integers + furthest stage + check against match scores."""
+    r = pd.DataFrame({"club_key": raw["club_key"]})
+    for col in ["position", "played", "won", "drawn", "lost", "goals_for",
+                "goals_against", "goal_diff", "points"]:
+        r[f"league_{col}"] = raw[f"{col}_raw"].map(to_int).astype("Int64")
+    r["advanced_to_r16"] = r["league_position"] <= 8
+
+    # Furthest stage: the latest knockout round each club played in
+    ko = matches[matches["stage"] == "knockout_stage"]
+    reached = pd.concat([
+        ko[["home_club_key", "round"]].set_axis(["club_key", "round"], axis=1),
+        ko[["away_club_key", "round"]].set_axis(["club_key", "round"], axis=1),
+    ])
+    # Playing in the Final = at least Runner-up; the winner is set just below
+    reached["order"] = reached["round"].replace({"Final": "Runner-up"}).map(STAGES.index)
+    furthest = reached.groupby("club_key")["order"].max().map(lambda i: STAGES[i])
+    final = ko[ko["round"] == "Final"].iloc[0]
+    for key in (final["home_club_key"], final["away_club_key"]):
+        furthest[key] = "Winner" if key == final["winner_club_key"] else "Runner-up"
+    r["furthest_stage"] = r["club_key"].map(furthest).fillna("League stage")
+    r["furthest_stage_order"] = r["furthest_stage"].map(STAGES.index) + 1  # for sorting in Looker
+
+    # Check: points recalculated from the 96 league-stage match scores
+    league = matches[matches["round"] == "League stage"]
+    points = pd.concat([
+        league.assign(key=league["home_club_key"],
+                      pts=(league["home_goals"] > league["away_goals"]) * 3
+                      + (league["home_goals"] == league["away_goals"]) * 1),
+        league.assign(key=league["away_club_key"],
+                      pts=(league["away_goals"] > league["home_goals"]) * 3
+                      + (league["home_goals"] == league["away_goals"]) * 1),
+    ]).groupby("key")["pts"].sum()
+    r["points_from_matches"] = r["club_key"].map(points).astype("Int64")
+    return r
+
+
+def clean_followers(raw: pd.DataFrame) -> pd.DataFrame:
+    """One row per club x platform with the follower count used in the analysis.
+
+    account_status explains every 0:
+      official             - count used as collected
+      excluded_unverified  - account found but not verified -> 0 (see rules)
+      no_official_account  - searched, no official account -> 0
+      not_checked          - could not be checked (Douyin needs a Chinese phone login) -> 0
+    """
+    f = raw.copy()
+    f["club"] = f["club_key"].map(CLUB_NAMES)
+    f["followers_reported"] = f["followers"].map(to_int).astype("Int64")
+    notes = (f["handle_note"] + " " + f["collector_notes"]).str.lower()
+    unverified = (f["handle_source"] == "research_check") | (
+        (f["handle_source"] == "wikidata") & notes.str.contains(r"\bnot verified\b"))
+
+    f["account_status"] = "official"
+    f.loc[unverified & EXCLUDE_UNVERIFIED, "account_status"] = "excluded_unverified"
+    no_count = f["followers_reported"].isna()
+    f.loc[no_count, "account_status"] = "no_official_account"
+    f.loc[no_count & notes.str.contains("not checked"), "account_status"] = "not_checked"
+
+    f["followers_used"] = f["followers_reported"].where(f["account_status"] == "official", 0).astype("Int64")
+    f["precision"] = f["collector_notes"].str.extract(r"precision:\s*(\w+)", expand=False).fillna("")
+    f["is_core_platform"] = f["platform"].isin(CORE_PLATFORMS)
+    f["flag"] = ""
+    add_flag(f, (f["account_status"] == "official") & (f["date_collected"] == ""), "date missing")
+    add_flag(f, (f["account_status"] == "official") & (f["source_url"] == ""), "source missing")
+    add_flag(f, f["account_status"] == "excluded_unverified",
+             f"unverified account excluded ({'' if EXCLUDE_UNVERIFIED else 'NOT '}counted as 0)")
+    return f
+
+
+def followers_per_club(f: pd.DataFrame) -> pd.DataFrame:
+    """Wide table: one column per platform + totals."""
+    wide = f.pivot(index="club_key", columns="platform", values="followers_used")
+    wide = wide.reindex(columns=CORE_PLATFORMS + CHINA_PLATFORMS)
+    out = pd.DataFrame(index=wide.index)
+    for p in CORE_PLATFORMS + CHINA_PLATFORMS:
+        out[f"{p}_followers"] = wide[p].astype("Int64")  # China platforms: blank for other clubs
+    out["core_platform_followers"] = wide[CORE_PLATFORMS].fillna(0).sum(axis=1).astype("Int64")
+    out["china_platform_followers"] = wide[CHINA_PLATFORMS].sum(axis=1, min_count=1).astype("Int64")
+    out["total_digital_followers"] = wide.fillna(0).sum(axis=1).astype("Int64")
+    out["accounts_counted"] = (wide > 0).sum(axis=1)
+    out["accounts_excluded_unverified"] = (
+        f[f["account_status"] == "excluded_unverified"].groupby("club_key").size()
+        .reindex(out.index).fillna(0).astype(int))
+    out["followers_date_collected"] = f.groupby("club_key")["date_collected"].max()
+    return out
+
+
 def crosscheck_transfermarkt(matches: pd.DataFrame, tm_raw: pd.DataFrame) -> pd.DataFrame:
     """Compare our per-stadium totals (all stages) with Transfermarkt's.
 
@@ -246,9 +370,15 @@ def flag_clubs(c: pd.DataFrame) -> None:
     add_flag(c, c["other_home_venues"].fillna("") != "", "used more than one home venue")
     add_flag(c, c["capacity_source"] == "wikipedia_stadium_page",
              "capacity from Wikipedia (not in Transfermarkt)")
+    add_flag(c, c["league_points"] != c["points_from_matches"],
+             "league-table points differ from points recalculated from match scores")
+    add_flag(c, c["china_platform_followers"].notna(),
+             "digital reach mainly on Weibo (core platforms blocked in China; Douyin not checked)")
+    add_flag(c, c["accounts_excluded_unverified"] > 0, "unverified social account(s) excluded")
 
 
-def summary(matches: pd.DataFrame, clubs: pd.DataFrame, check: pd.DataFrame) -> None:
+def summary(matches: pd.DataFrame, clubs: pd.DataFrame, check: pd.DataFrame,
+            followers: pd.DataFrame) -> None:
     print("=" * 60)
     print("DATA-QUALITY SUMMARY")
     print("=" * 60)
@@ -265,6 +395,13 @@ def summary(matches: pd.DataFrame, clubs: pd.DataFrame, check: pd.DataFrame) -> 
     print(clubs.loc[clubs["flag"] != "", ["club", "flag"]].to_string(index=False))
     print("\nTransfermarkt cross-check (stadium totals):")
     print(check["status"].value_counts().to_string())
+    mismatch = clubs[clubs["league_points"] != clubs["points_from_matches"]]
+    print(f"\nPoints check (table vs. recalculated from 96 match scores): "
+          f"{'all 24 match' if mismatch.empty else f'{len(mismatch)} MISMATCH(ES)'}")
+    print("\nSocial accounts by status (all platforms):")
+    print(followers["account_status"].value_counts().to_string())
+    excluded = followers[followers["account_status"] == "excluded_unverified"]
+    print(f"  followers excluded as unverified: {int(excluded['followers_reported'].sum()):,}")
     print("=" * 60)
 
 
@@ -273,26 +410,51 @@ def main() -> None:
     matches = clean_matches(pd.read_csv(INTERIM / "matches_raw.csv", dtype=str).fillna(""))
     clubs = clean_clubs(pd.read_csv(INTERIM / "clubs_raw.csv", dtype=str).fillna(""))
     tm = pd.read_csv(INTERIM / "tm_stadium_attendance_raw.csv", dtype=str)
+    results_raw = pd.read_csv(INTERIM / "results_raw.csv", dtype=str).fillna("")
+    followers_raw = pd.read_csv(ROOT / "data" / "raw" / "digital_followers_filled.csv",
+                                dtype=str).fillna("")
 
+    add_goals(matches)
     flag_matches(matches, clubs)
     clubs = club_attendance(matches, clubs)
+    clubs = clubs.merge(clean_results(results_raw, matches), on="club_key", how="left")
+    followers = clean_followers(followers_raw)
+    clubs = clubs.merge(followers_per_club(followers), left_on="club_key", right_index=True, how="left")
+    # Digital reach relative to stadium crowd (all platforms, incl. Weibo for China clubs)
+    clubs["followers_per_fan"] = (clubs["total_digital_followers"] / clubs["avg_attendance"]).astype(float).round(1)
     flag_clubs(clubs)
     check = crosscheck_transfermarkt(matches, tm)
 
     match_cols = ["match_id", "stage", "round", "date", "home_club", "away_club", "score",
-                  "penalties", "venue_name", "attendance", "is_neutral_venue",
-                  "home_main_stadium", "home_capacity", "report_url", "flag"]
-    club_cols = ["club", "country", "region", "home_stadium", "capacity", "capacity_source",
-                 "home_matches", "total_attendance", "avg_attendance", "max_attendance",
-                 "min_attendance", "max_attendance_match_id", "capacity_utilisation",
+                  "home_goals", "away_goals", "penalties", "venue_name", "attendance",
+                  "is_neutral_venue", "home_main_stadium", "home_capacity", "report_url", "flag"]
+    club_cols = ["club", "country", "region",
+                 # stadium + attendance (league-stage home matches)
+                 "home_stadium", "capacity", "capacity_source", "home_matches",
+                 "total_attendance", "avg_attendance", "max_attendance", "min_attendance",
+                 "max_attendance_match_id", "capacity_utilisation",
                  "neutral_venue_matches_excluded", "r16_home_matches", "r16_home_attendance",
+                 # results
+                 "league_position", "league_played", "league_won", "league_drawn", "league_lost",
+                 "league_goals_for", "league_goals_against", "league_goal_diff", "league_points",
+                 "points_from_matches", "advanced_to_r16", "furthest_stage", "furthest_stage_order",
+                 # digital
+                 *[f"{p}_followers" for p in CORE_PLATFORMS + CHINA_PLATFORMS],
+                 "core_platform_followers", "china_platform_followers", "total_digital_followers",
+                 "accounts_counted", "accounts_excluded_unverified", "followers_date_collected",
+                 "followers_per_fan",
+                 # housekeeping
                  "other_home_venues", "club_key", "flag"]
+    follower_cols = ["club", "platform", "is_core_platform", "handle", "account_url",
+                     "handle_source", "account_status", "followers_reported", "followers_used",
+                     "precision", "date_collected", "source_url", "collector_notes", "club_key", "flag"]
     matches[match_cols].to_csv(CLEAN / "matches.csv", index=False)
     clubs[club_cols].to_csv(CLEAN / "clubs.csv", index=False)
+    followers[follower_cols].to_csv(CLEAN / "digital_followers.csv", index=False)
     check.to_csv(CLEAN / "attendance_crosscheck.csv", index=False)
 
-    summary(matches, clubs, check)
-    for name in ["matches.csv", "clubs.csv", "attendance_crosscheck.csv"]:
+    summary(matches, clubs, check, followers)
+    for name in ["matches.csv", "clubs.csv", "digital_followers.csv", "attendance_crosscheck.csv"]:
         print(f"Wrote {CLEAN / name}")
 
 
