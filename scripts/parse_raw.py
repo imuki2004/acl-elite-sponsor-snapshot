@@ -91,6 +91,21 @@ def strip_footnotes(text: str) -> str:
     return re.sub(r"\[[^\]]*\]", "", text).strip()
 
 
+KNOCKOUT_ROUNDS = ["Round of 16", "Quarter-finals", "Semi-finals", "Final"]
+
+
+def match_round(box, stage: str) -> str:
+    """Round name = the closest section heading above the match box that is a
+    round name. (Other headings like 'Summary' or 'East Region' are skipped.)"""
+    if stage == "league_stage":
+        return "League stage"
+    headings = box.xpath("preceding::*[self::h2 or self::h3 or self::h4]")
+    for heading in reversed(headings):  # closest heading first
+        if clean_text(heading) in KNOCKOUT_ROUNDS:
+            return clean_text(heading)
+    return ""
+
+
 def parse_football_boxes(path: Path, stage: str) -> list[dict]:
     """Extract every Wikipedia 'football box' (one box = one match).
 
@@ -121,12 +136,17 @@ def parse_football_boxes(path: Path, stage: str) -> list[dict]:
 
         home = first(box.xpath('.//th[@class="fhome"]'))
         away = first(box.xpath('.//th[@class="faway"]'))
+        # Shoot-out score sits in the row after the 'Penalties' row, e.g. '2–4'.
+        penalties = clean_text(first(box.xpath(
+            './/tr[normalize-space(.)="Penalties"]/following-sibling::tr[1]/th')))
         rows.append({
             "stage": stage,
+            "round": match_round(box, stage),
             "match_id": box.get("id", ""),
             "date": clean_text(first(box.xpath('.//span[contains(@class, "dtstart")]'))),
             "home_team": clean_text(home),
             "score": clean_text(first(box.xpath('.//th[@class="fscore"]'))),
+            "penalties": penalties,
             "away_team": clean_text(away),
             "home_club_key": club_key(home),
             "away_club_key": club_key(away),
@@ -264,6 +284,7 @@ def main() -> None:
     print(f"tm_acle_attendance_2025.html: {len(stadiums)} stadiums")
 
     league = parse_league_tables(RAW / "wiki_acle.html")
+    league.to_csv(INTERIM / "results_raw.csv", index=False)
     crosswalk = pd.read_csv(ROOT / "data" / "reference" / "stadium_crosswalk.csv", dtype=str).fillna("")
     clubs = build_clubs(league, matches, stadiums, crosswalk)
     clubs.to_csv(INTERIM / "clubs_raw.csv", index=False)
@@ -278,11 +299,13 @@ def main() -> None:
     league_matches = matches[matches["stage"] == "league_stage"]
     print("  league-stage clubs in match boxes:",
           pd.concat([league_matches.home_club_key, league_matches.away_club_key]).nunique())
+    print("  matches per round:", matches["round"].value_counts().to_dict())
+    print("  matches decided on penalties:", (matches["penalties"] != "").sum())
     print("  clubs per region:", clubs["region"].value_counts().to_dict())
     print("  clubs without country:", (clubs["country_raw"] == "").sum())
     print("  clubs without home stadium:", clubs["home_stadium"].isna().sum())
     print("  clubs without capacity:", (clubs["capacity_raw"] == "").sum())
-    for name in ["matches_raw.csv", "tm_stadium_attendance_raw.csv", "clubs_raw.csv"]:
+    for name in ["matches_raw.csv", "tm_stadium_attendance_raw.csv", "clubs_raw.csv", "results_raw.csv"]:
         print(f"Wrote {INTERIM / name}")
 
 
