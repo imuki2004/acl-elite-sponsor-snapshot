@@ -32,6 +32,10 @@ SOURCES=(
   "wiki_knockout_stage.html|https://en.wikipedia.org/w/index.php?title=2025%E2%80%9326_AFC_Champions_League_Elite_knockout_stage&oldid=1363036612"
   # Transfermarkt attendance by stadium (competition code ACLE; code 'ACL' is the CAF Champions League)
   "tm_acle_attendance_2025.html|https://www.transfermarkt.com/afc-champions-league-elite/besucherzahlen/pokalwettbewerb/ACLE/saison_id/2025"
+  # Stadium capacities for the 3 home grounds missing from the Transfermarkt table
+  "wiki_stadium_jassim_bin_hamad.html|https://en.wikipedia.org/w/index.php?title=Jassim_bin_Hamad_Stadium&oldid=1385277411"
+  "wiki_stadium_abdullah_bin_khalifa.html|https://en.wikipedia.org/w/index.php?title=Abdullah_bin_Khalifa_Stadium&oldid=1385459817"
+  "wiki_stadium_rashid.html|https://en.wikipedia.org/w/index.php?title=Rashid_Stadium&oldid=1384819846"
 )
 
 for entry in "${SOURCES[@]}"; do
