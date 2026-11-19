@@ -1,0 +1,5 @@
+fetched_at_utc,file,http_status,bytes,sha256,url
+2026-11-19T13:12:59Z,wiki_league_stage.html,200,1237414,71dbb156001002fc0559f45c0199c631faa2365b8af22b6e90ea9503771cea6e,"https://en.wikipedia.org/wiki/2025%E2%80%9326_AFC_Champions_League_Elite_league_stage"
+2026-11-19T13:13:00Z,wiki_acle.html,200,881731,9466f1bd8946698c862c81ca29e000bb89eab290e3baceaea914fad53338ff93,"https://en.wikipedia.org/wiki/2025%E2%80%9326_AFC_Champions_League_Elite"
+2026-11-19T13:13:24Z,tm_acle_attendance_2025.html,200,99472,f45318ba75b65224a9a01f62bf452e1528335427b3311ec2be427728316075e8,"https://www.transfermarkt.com/afc-champions-league-elite/besucherzahlen/pokalwettbewerb/ACLE/saison_id/2025"
+2026-11-19T13:15:09Z,wiki_knockout_stage.html,200,507993,2510db997d95174aee8dc722b4858338e059c7fd5f7c9246c43d0090c6c24330,"https://en.wikipedia.org/wiki/2025%E2%80%9326_AFC_Champions_League_Elite_knockout_stage"
