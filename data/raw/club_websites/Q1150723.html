@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="uz">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="description" content="Official website of FC NASAF football club. Latest news, match schedules, team information, and more." />
+    <meta name="theme-color" content="#990a2c" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta name="author" content="FC NASAF" />
+    <meta name="keywords" content="FC NASAF, football, soccer, Uzbekistan, Super League, Qarshi, sports, team, matches, players" />
+    <meta name="geo.region" content="UZ" />
+    <meta name="geo.placename" content="Qarshi" />
+    
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.json" />
+    
+    <!-- Alternate language versions -->
+    <link rel="alternate" hreflang="uz" href="https://fcnasaf.uz/" />
+    <link rel="alternate" hreflang="en" href="https://fcnasaf.uz/en" />
+    
+    <!-- Preload critical fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Preload critical CSS -->
+    
+    <!-- Add critical CSS inline -->
+    <style>
+      /* Critical CSS for initial render */
+      body {
+        font-family: 'Inter', sans-serif;
+        margin: 0;
+        padding: 0;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      .loading-spinner {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        width: 100vw;
+      }
+      .spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid rgba(153, 10, 44, 0.2);
+        border-radius: 50%;
+        border-top-color: #990a2c;
+        animation: spin 1s ease-in-out infinite;
+      }
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+    </style>
+    
+    <title>FC NASAF</title>
+    <script type="module" crossorigin src="/assets/index-Ck7nsSQ2.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/react-BQT7lgWK.js">
+    <link rel="modulepreload" crossorigin href="/assets/supabase-BekzN0q7.js">
+    <link rel="modulepreload" crossorigin href="/assets/i18n-B1r4Tk29.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-BnBxjo6l.css">
+  <link rel="manifest" href="/manifest.webmanifest"></head>
+  <body>
+    <div id="root">
+      <!-- Initial loading state -->
+      <div class="loading-spinner">
+        <div class="spinner"></div>
+      </div>
+    </div>
+    <script>
+      // Fix for iOS 100vh issue (SW handled in main.tsx)
+      document.addEventListener('DOMContentLoaded', function() {
+        const setVhVariable = () => {
+          const vh = window.innerHeight * 0.01;
+          document.documentElement.style.setProperty('--vh', `${vh}px`);
+        };
+        setVhVariable();
+        window.addEventListener('resize', setVhVariable);
+      });
+    </script>
+  </body>
+</html>
