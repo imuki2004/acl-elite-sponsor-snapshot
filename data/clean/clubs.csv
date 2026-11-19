@@ -1,0 +1,25 @@
+club,country,region,home_stadium,capacity,capacity_source,home_matches,total_attendance,avg_attendance,max_attendance,min_attendance,max_attendance_match_id,capacity_utilisation,neutral_venue_matches_excluded,r16_home_matches,r16_home_attendance,other_home_venues,club_key,flag
+Al Hilal,Saudi Arabia,West,Kingdom Arena,30000,transfermarkt,4,77592,19398,25083,10070,Al-Hilal_v_Al_Sadd,0.647,0,0,,,Al_Hilal_SFC,
+Al Ahli,Saudi Arabia,West,King Abdullah Sports City Stadium,62345,transfermarkt,4,53433,13358,20666,6166,Al-Ahli_v_Nasaf,0.214,0,0,,"Prince Abdullah Al-Faisal Sports City Stadium, Jeddah",Al-Ahli_Saudi_FC,used more than one home venue
+Tractor,Iran,West,Sahand Stadium,66833,transfermarkt,3,108256,36085,49403,26203,Tractor_v_Al_Wahda,0.54,1,0,,"Jassim bin Hamad Stadium, Doha (Qatar)[note 1]",Tractor_S.C.,neutral-venue home match excluded from averages; used more than one home venue
+Al Ittihad,Saudi Arabia,West,King Abdullah Sports City Stadium,62345,transfermarkt,4,103159,25790,43610,14829,Al-Ittihad_v_Al-Gharafa,0.414,0,0,,,Al-Ittihad_Club_(Jeddah),
+Al Wahda,United Arab Emirates,West,Al Nahyan Stadium,15000,transfermarkt,4,29045,7261,12131,2233,Al_Wahda_v_Al-Ittihad,0.484,0,0,,,Al_Wahda_FC,
+Shabab Al Ahli,United Arab Emirates,West,Rashid Stadium,8015,wikipedia_stadium_page,4,7867,1967,3010,987,Shabab_Al_Ahli_v_Tractor,0.245,0,0,,,Shabab_Al_Ahli_Club,capacity from Wikipedia (not in Transfermarkt)
+Al Duhail,Qatar,West,Abdullah Bin Khalifa Stadium,10221,wikipedia_stadium_page,4,16858,4214,6384,1900,Al-Duhail_v_Al-Ittihad,0.412,0,0,,,Al-Duhail_SC,capacity from Wikipedia (not in Transfermarkt)
+Al Sadd,Qatar,West,Jassim bin Hamad Stadium,15000,wikipedia_stadium_page,4,37629,9407,13038,4937,Al_Sadd_v_Al-Ahli,0.627,0,0,,,Al_Sadd_SC,capacity from Wikipedia (not in Transfermarkt)
+Sharjah,United Arab Emirates,West,Sharjah Stadium,18000,transfermarkt,4,10795,2699,7763,852,Sharjah_v_Al-Hilal,0.15,0,0,,,Sharjah_FC,
+Al Gharafa,Qatar,West,Thani bin Jassim Stadium,24826,transfermarkt,4,13407,3352,7429,1003,Al-Gharafa_v_Al-Hilal,0.135,0,0,,"Khalifa International Stadium, Al Rayyan",Al-Gharafa_SC,used more than one home venue
+Al Shorta,Iraq,West,Al Zawraa Stadium,15443,transfermarkt,4,55080,13770,30647,3452,Al-Shorta_v_Al-Ittihad,0.892,0,0,,"Al-Madina International Stadium, Baghdad",Al-Shorta_SC,used more than one home venue
+Nasaf,Uzbekistan,West,Markaziy Stadium,17750,transfermarkt,4,26979,6745,17120,1321,Nasaf_v_Al-Hilal,0.38,0,0,,"Istiqlol Stadium, Fergana",FC_Nasaf,used more than one home venue
+Machida Zelvia,Japan,East,Machida City Nozuta Park Stadium,15320,transfermarkt,4,17197,4299,4798,3653,Machida_Zelvia_v_FC_Seoul,0.281,0,1,4345,,FC_Machida_Zelvia,
+Vissel Kobe,Japan,East,Kobe City Misaki Park Stadium,30132,transfermarkt,4,28113,7028,8718,5119,Vissel_Kobe_v_Chengdu_Rongcheng,0.233,0,1,14750,,Vissel_Kobe,
+Sanfrecce Hiroshima,Japan,East,Hiroshima Soccer Stadium,28529,transfermarkt,4,40115,10029,13240,7819,Sanfrecce_Hiroshima_v_Shanghai_Shenhua,0.352,0,1,11128,,Sanfrecce_Hiroshima,
+Buriram United,Thailand,East,Buriram Stadium,32600,transfermarkt,4,67398,16850,21937,14161,Buriram_United_v_Johor_Darul_Ta'zim,0.517,0,1,22950,,Buriram_United_F.C.,
+Melbourne City,Australia,East,Melbourne Rectangular Stadium,30050,transfermarkt,4,6542,1636,2165,936,Melbourne_City_v_Johor_Darul_Ta'zim,0.054,0,1,1478,,Melbourne_City_FC,
+Johor Darul Ta'zim,Malaysia,East,Sultan Ibrahim Stadium,40000,transfermarkt,4,100566,25142,31673,19760,Johor_Darul_Ta'zim_v_Vissel_Kobe,0.629,0,1,31225,,Johor_Darul_Ta'zim_F.C.,
+FC Seoul,South Korea,East,Seoul World Cup Stadium,66704,transfermarkt,4,28269,7067,8106,6279,FC_Seoul_v_Melbourne_City,0.106,0,1,6508,"Mokdong Stadium, Seoul[note 2]",FC_Seoul,used more than one home venue
+Gangwon FC,South Korea,East,Chuncheon Songam Sports Town Stadium,20000,transfermarkt,4,14278,3570,4158,2527,Gangwon_FC_v_Vissel_Kobe,0.178,0,1,2675,,Gangwon_FC,
+Ulsan HD,South Korea,East,Ulsan Munsu Football Stadium,44474,transfermarkt,4,12425,3106,3750,2598,Ulsan_HD_v_Melbourne_City,0.07,0,0,,,Ulsan_HD_FC,
+Chengdu Rongcheng,China,East,Phoenix Hill Sports Park Football Stadium,50695,transfermarkt,4,149068,37267,41463,27836,Chengdu_Rongcheng_v_Gangwon_FC,0.735,0,0,,,Chengdu_Rongcheng_F.C.,
+Shanghai Shenhua,China,East,Shanghai Stadium,70381,transfermarkt,4,79717,19929,30645,12487,Shanghai_Shenhua_v_Ulsan_HD,0.283,0,0,,,Shanghai_Shenhua_F.C.,
+Shanghai Port,China,East,Pudong Football Stadium,33765,transfermarkt,4,49767,12442,15103,10197,Shanghai_Port_v_Ulsan_HD,0.368,0,0,,,Shanghai_Port_F.C.,
