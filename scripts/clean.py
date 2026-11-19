@@ -90,6 +90,7 @@ def to_int(value) -> "int | None":
       '1,214'  -> 1214     (comma thousands, Wikipedia)
       '30.000' -> 30000    (dot thousands, Transfermarkt - NOT 30.0!)
       '1.2M'   -> 1200000  ('K', 'M', 'B' suffixes, social media)
+      '12.3万' -> 123000   (Chinese 万 = 10,000 and 亿 = 100,000,000; Weibo/Douyin)
       '−4'     -> -4       (Unicode minus sign, Wikipedia goal difference)
       '+11'    -> 11
       ''/NaN   -> None
@@ -101,10 +102,11 @@ def to_int(value) -> "int | None":
     if text in ("", "-", "—", "–"):
         return None
 
-    suffix = re.fullmatch(r"([+-]?\d+(?:[.,]\d+)?)([KkMmBb])", text)
+    suffix = re.fullmatch(r"([+-]?\d+(?:[.,]\d+)?)([KkMmBb万亿])", text)
     if suffix:
         number = float(suffix.group(1).replace(",", "."))
-        return round(number * {"k": 1e3, "m": 1e6, "b": 1e9}[suffix.group(2).lower()])
+        multiplier = {"k": 1e3, "m": 1e6, "b": 1e9, "万": 1e4, "亿": 1e8}[suffix.group(2).lower()]
+        return round(number * multiplier)
 
     # Thousands separators: groups of exactly 3 digits after ',' or '.'
     if re.fullmatch(r"[+-]?\d{1,3}([.,]\d{3})+", text):
