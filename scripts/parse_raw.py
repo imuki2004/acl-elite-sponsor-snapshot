@@ -268,6 +268,86 @@ def build_clubs(league: pd.DataFrame, matches: pd.DataFrame,
     return pd.concat([clubs, clubs["home_stadium"].apply(capacity_for)], axis=1)
 
 
+# --------------------------------------------------------------------------
+# Social-media accounts (handles only - follower counts are collected by hand)
+# --------------------------------------------------------------------------
+PLATFORMS = ["instagram", "tiktok", "youtube", "x"]
+
+# Wikidata property per platform
+WIKIDATA_PROPERTY = {"instagram": "P2003", "tiktok": "P7085", "youtube": "P2397", "x": "P2002"}
+
+# How each platform's profile links look in a web page
+LINK_PATTERN = {
+    "instagram": r"instagram\.com/([A-Za-z0-9_.]+)",
+    "tiktok": r"tiktok\.com/@([A-Za-z0-9_.]+)",
+    "youtube": r"youtube\.com/((?:channel/|c/|user/|@)[A-Za-z0-9_\-.]+)",
+    "x": r"(?:twitter|x)\.com/([A-Za-z0-9_]+)",
+}
+# Path segments that are features of the platform, not accounts
+NOT_ACCOUNTS = {"p", "reel", "reels", "explore", "share", "sharer", "embed", "watch",
+                "intent", "home", "hashtag", "widgets", "jp", "en", "i", "search"}
+
+PROFILE_URL = {
+    "instagram": "https://www.instagram.com/{}/",
+    "tiktok": "https://www.tiktok.com/@{}",
+    "youtube": "https://www.youtube.com/{}",
+    "x": "https://x.com/{}",
+}
+
+
+def wikidata_club_map() -> dict:
+    """Wikidata item id (Q...) -> our club_key, from wikidata_club_ids.json.
+
+    We asked Wikipedia for our club_keys; it may have normalised or redirected
+    the title, so we follow those steps back to the key we asked for."""
+    data = pd.read_json(RAW / "wikidata_club_ids.json", typ="series")["query"]
+    back = {}
+    for step in data.get("normalized", []) + data.get("redirects", []):
+        back[step["to"]] = back.get(step["from"], step["from"])
+    out = {}
+    for page in data["pages"].values():
+        asked = back.get(page["title"], page["title"])
+        key = CLUB_KEY_ALIASES.get(asked.replace(" ", "_"), asked.replace(" ", "_"))
+        out[page["pageprops"]["wikibase_item"]] = key
+    return out
+
+
+def parse_social_accounts() -> pd.DataFrame:
+    """One row per club x platform with the handle found on (a) the club's
+    official website and (b) Wikidata. Nothing is decided here; clean-up and
+    the 'which one to use' rule happen when the template is built."""
+    entities = pd.read_json(RAW / "wikidata_club_claims.json", typ="series")["entities"]
+    qid_to_club = wikidata_club_map()
+    rows = []
+    for qid, entity in entities.items():
+        website_file = RAW / "club_websites" / f"{qid}.html"
+        page = website_file.read_text(encoding="utf-8", errors="ignore") if website_file.exists() else ""
+        sites = [c["mainsnak"]["datavalue"]["value"] for c in entity["claims"].get("P856", [])
+                 if "datavalue" in c["mainsnak"]]
+        for platform in PLATFORMS:
+            found = [h for h in re.findall(LINK_PATTERN[platform], page)
+                     if h.lower() not in NOT_ACCOUNTS]
+            # The club's own account is linked most often (header + footer);
+            # sponsors or embedded posts usually appear once.
+            website_handle = pd.Series(found).mode().iloc[0] if found else ""
+            wikidata = [c["mainsnak"]["datavalue"]["value"]
+                        for c in entity["claims"].get(WIKIDATA_PROPERTY[platform], [])
+                        if "datavalue" in c["mainsnak"]]
+            if platform == "youtube":
+                wikidata = [f"channel/{v}" for v in wikidata]  # Wikidata stores the channel id
+            rows.append({
+                "club_key": qid_to_club[qid],
+                "wikidata_id": qid,
+                "platform": platform,
+                "website_handle": website_handle,
+                "website_handle_count": found.count(website_handle) if found else 0,
+                "wikidata_handles": "; ".join(wikidata),
+                "official_website": sites[-1] if sites else "",
+                "website_downloaded": website_file.exists(),
+            })
+    return pd.DataFrame(rows)
+
+
 def main() -> None:
     INTERIM.mkdir(parents=True, exist_ok=True)
 
@@ -290,6 +370,10 @@ def main() -> None:
     clubs.to_csv(INTERIM / "clubs_raw.csv", index=False)
     print(f"wiki_acle.html: {len(clubs)} clubs")
 
+    social = parse_social_accounts()
+    social.to_csv(INTERIM / "social_accounts_raw.csv", index=False)
+    print(f"wikidata + club websites: {social['club_key'].nunique()} clubs x {len(PLATFORMS)} platforms")
+
     # Quick checks so problems are visible straight away
     print("\nChecks:")
     print("  matches without attendance:", (matches["attendance_raw"] == "").sum())
@@ -305,7 +389,13 @@ def main() -> None:
     print("  clubs without country:", (clubs["country_raw"] == "").sum())
     print("  clubs without home stadium:", clubs["home_stadium"].isna().sum())
     print("  clubs without capacity:", (clubs["capacity_raw"] == "").sum())
-    for name in ["matches_raw.csv", "tm_stadium_attendance_raw.csv", "clubs_raw.csv", "results_raw.csv"]:
+    print("  social accounts found on website / Wikidata / neither:",
+          (social["website_handle"] != "").sum(), "/",
+          (social["wikidata_handles"] != "").sum(), "/",
+          ((social["website_handle"] == "") & (social["wikidata_handles"] == "")).sum(),
+          f"(of {len(social)})")
+    for name in ["matches_raw.csv", "tm_stadium_attendance_raw.csv", "clubs_raw.csv",
+                 "results_raw.csv", "social_accounts_raw.csv"]:
         print(f"Wrote {INTERIM / name}")
 
 
